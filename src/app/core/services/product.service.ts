@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 import { environment } from '../../../environments/environment';
 
@@ -12,6 +13,20 @@ export class ProductService {
 
   getProducts(): Observable<{ data: Product[] }> {
     return this.http.get<{ data: Product[] }>(this.apiUrl);
+  }
+
+  getProductById(id: string): Observable<Product> {
+    return this.http
+      .get<{ data: Product[] }>(this.apiUrl)
+      .pipe(
+        map((res) => {
+          const product = res.data?.find((p) => p.id === id);
+          if (!product) {
+            throw new Error('Product not found');
+          }
+          return product;
+        })
+      );
   }
 
   verifyProductId(id: string): Observable<boolean> {
