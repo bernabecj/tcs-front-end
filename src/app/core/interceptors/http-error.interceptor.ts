@@ -29,6 +29,8 @@ function getErrorMessage(err: HttpErrorResponse): string {
   }
 
   switch (status) {
+    case 0:
+      return 'No se pudo conectar con el servidor. Verifica que el backend esté en ejecución en http://localhost:3002';
     case 400:
       return 'Solicitud inválida. Revisa los datos ingresados.';
     case 404:
