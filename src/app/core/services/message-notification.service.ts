@@ -21,11 +21,13 @@ export class MessageNotificationService {
     map((n) => n?.message ?? null)
   );
 
+  private readonly defaultAutoDismissMs = 3000;
+
   setError(message: string): void {
-    this._notification$.next({ message, type: 'error' });
+    this._notification$.next({ message, type: 'error', autoDismissMs: this.defaultAutoDismissMs });
   }
 
-  setWarning(message: string, autoDismissMs: number = 3000): void {
+  setWarning(message: string, autoDismissMs: number = this.defaultAutoDismissMs): void {
     this._notification$.next({ message, type: 'warning', autoDismissMs });
   }
 

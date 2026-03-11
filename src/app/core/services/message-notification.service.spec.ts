@@ -20,10 +20,10 @@ describe('MessageNotificationService', () => {
     });
   });
 
-  it('should emit error notification when setError is called', (done) => {
+  it('should emit error notification with autoDismiss when setError is called', (done) => {
     service.setError('Test error');
     service.notification$.subscribe((n) => {
-      expect(n).toEqual({ message: 'Test error', type: 'error' });
+      expect(n).toEqual({ message: 'Test error', type: 'error', autoDismissMs: 3000 });
       done();
     });
   });

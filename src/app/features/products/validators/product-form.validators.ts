@@ -1,10 +1,19 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+/** Returns today's date in local time as YYYY-MM-DD (avoids UTC vs local mismatch). */
+function getTodayLocal(): string {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
 export function dateReleaseMinToday(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value as string | null;
     if (!value) return null;
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayLocal();
     return value < today ? { dateReleaseMinToday: true } : null;
   };
 }

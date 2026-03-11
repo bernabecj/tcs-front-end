@@ -1,6 +1,14 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { dateReleaseMinToday, dateRevisionOneYearAfter } from './product-form.validators';
 
+/** Local date as YYYY-MM-DD (matches validator logic). */
+function localDateString(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
+
 describe('product-form validators', () => {
   describe('dateReleaseMinToday', () => {
     it('returns null when value is empty', () => {
@@ -11,12 +19,12 @@ describe('product-form validators', () => {
     it('returns error when date is before today', () => {
       const past = new Date();
       past.setDate(past.getDate() - 1);
-      const control = new FormControl(past.toISOString().slice(0, 10));
+      const control = new FormControl(localDateString(past));
       expect(dateReleaseMinToday()(control)).toEqual({ dateReleaseMinToday: true });
     });
 
     it('returns null when date is today', () => {
-      const today = new Date().toISOString().slice(0, 10);
+      const today = localDateString(new Date());
       const control = new FormControl(today);
       expect(dateReleaseMinToday()(control)).toBeNull();
     });
@@ -24,7 +32,7 @@ describe('product-form validators', () => {
     it('returns null when date is after today', () => {
       const future = new Date();
       future.setFullYear(future.getFullYear() + 1);
-      const control = new FormControl(future.toISOString().slice(0, 10));
+      const control = new FormControl(localDateString(future));
       expect(dateReleaseMinToday()(control)).toBeNull();
     });
   });

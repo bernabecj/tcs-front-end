@@ -30,14 +30,14 @@ import { MessageNotificationService } from '../../../core/services/message-notif
         z-index: 1000;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0.75rem;
-        max-width: 280px;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        max-width: 340px;
         background: #fff;
         border: 1px solid #e9ecef;
-        border-radius: 6px;
+        border-radius: 8px;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        font-size: 0.8125rem;
+        font-size: 0.9375rem;
         color: #333;
       }
 
@@ -62,9 +62,9 @@ import { MessageNotificationService } from '../../../core/services/message-notif
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 18px;
-        height: 18px;
-        font-size: 0.875rem;
+        width: 22px;
+        height: 22px;
+        font-size: 1rem;
         font-weight: 700;
         color: #fff;
         border-radius: 50%;
@@ -77,10 +77,10 @@ import { MessageNotificationService } from '../../../core/services/message-notif
 
       .alert-banner__close {
         flex-shrink: 0;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         padding: 0;
-        font-size: 1.25rem;
+        font-size: 1.375rem;
         line-height: 1;
         background: none;
         border: none;
