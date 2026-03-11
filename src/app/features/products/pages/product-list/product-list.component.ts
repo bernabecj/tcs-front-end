@@ -16,7 +16,7 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
           <input
             type="text"
             class="product-list-search"
-            placeholder="Search..."
+            placeholder="Buscar por nombre o descripción..."
             [value]="searchTerm()"
             (input)="onSearchInput($event)"
           />
@@ -28,7 +28,9 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
         } @else if (error()) {
           <p class="product-list-message product-list-message--error">{{ error() }}</p>
         } @else if (displayedProducts().length === 0) {
-          <p class="product-list-message product-list-message--empty">No hay productos para mostrar.</p>
+          <p class="product-list-message product-list-message--empty">
+            {{ filteredProductCount() === 0 && products().length > 0 ? 'No hay productos que coincidan con la búsqueda.' : 'No hay productos para mostrar.' }}
+          </p>
         } @else {
           <table class="product-table">
             <thead>
@@ -114,18 +116,25 @@ export class ProductListComponent {
   readonly pageSize = signal(5);
   readonly logoErrors = signal<Set<string>>(new Set());
 
-  readonly displayedProducts = computed(() => {
+  /** Products matching the current search term (before page size slice). */
+  readonly filteredProducts = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
     const all = this.products();
-    const filtered = term
+    return term
       ? all.filter(
           (p) =>
             p.name.toLowerCase().includes(term) ||
             p.description.toLowerCase().includes(term)
         )
       : all;
-    return filtered.slice(0, this.pageSize());
   });
+
+  readonly filteredProductCount = computed(() => this.filteredProducts().length);
+
+  /** Products to show in the table (filtered + sliced by page size). */
+  readonly displayedProducts = computed(() =>
+    this.filteredProducts().slice(0, this.pageSize())
+  );
 
   constructor() {
     this.loadProducts();
