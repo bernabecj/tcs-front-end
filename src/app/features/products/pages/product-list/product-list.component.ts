@@ -37,15 +37,15 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
                 <th>Nombre del producto</th>
                 <th>
                   Descripción
-                  <span class="product-table__info-icon" aria-label="Info">i</span>
+                  <span class="product-table__info-icon" title="Descripción del producto" aria-label="Info">i</span>
                 </th>
                 <th>
                   Fecha de liberación
-                  <span class="product-table__info-icon" aria-label="Info">i</span>
+                  <span class="product-table__info-icon" title="Fecha de liberación del producto" aria-label="Info">i</span>
                 </th>
                 <th>
                   Fecha de reestructuración
-                  <span class="product-table__info-icon" aria-label="Info">i</span>
+                  <span class="product-table__info-icon" title="Fecha de reestructuración del producto" aria-label="Info">i</span>
                 </th>
                 <th></th>
               </tr>
