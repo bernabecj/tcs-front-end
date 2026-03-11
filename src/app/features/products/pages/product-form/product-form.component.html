@@ -1,7 +1,13 @@
 <div class="product-form-page">
   <div class="product-form-card">
-    <h2 class="product-form-title">Formulario de Registro</h2>
+    <h2 class="product-form-title">{{ isEditMode() ? 'Editar producto' : 'Formulario de Registro' }}</h2>
 
+    @if (loadError()) {
+      <p class="product-form-message product-form-message--error">{{ loadError() }}</p>
+      <a routerLink="/products" class="btn-link">Volver al listado</a>
+    } @else if (loadingProduct()) {
+      <p class="product-form-message product-form-message--loading">Cargando producto...</p>
+    } @else {
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="product-form">
       <div class="product-form__row">
         <div class="product-form__field">
@@ -121,9 +127,10 @@
         <a routerLink="/products" class="btn-link">Cancelar</a>
         <button type="button" class="btn-secondary" (click)="reiniciar()">Reiniciar</button>
         <button type="submit" class="btn-primary" [disabled]="submitting">
-          {{ submitting ? 'Enviando...' : 'Agregar' }}
+          {{ submitting ? (isEditMode() ? 'Guardando...' : 'Enviando...') : (isEditMode() ? 'Guardar' : 'Agregar') }}
         </button>
       </div>
     </form>
+    }
   </div>
 </div>

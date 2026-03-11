@@ -1,19 +1,30 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { Router, provideRouter } from '@angular/router';
+import { Router, provideRouter, ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 import { ProductFormComponent } from './product-form.component';
 import { ProductService } from '../../../../core/services/product.service';
 
+const mockProduct = {
+  id: 'prod-edit',
+  name: 'Product to Edit',
+  description: 'Description of product to edit',
+  logo: 'https://logo.url',
+  date_release: '2030-06-01',
+  date_revision: '2031-06-01',
+};
+
 describe('ProductFormComponent', () => {
   let component: ProductFormComponent;
   let fixture: ComponentFixture<ProductFormComponent>;
-  let productService: jest.Mocked<Pick<ProductService, 'verifyProductId' | 'createProduct'>>;
+  let productService: jest.Mocked<Pick<ProductService, 'verifyProductId' | 'createProduct' | 'getProductById' | 'updateProduct'>>;
   let router: Router;
 
   beforeEach(async () => {
     productService = {
       verifyProductId: jest.fn().mockReturnValue(of(false)),
       createProduct: jest.fn().mockReturnValue(of({ data: {} as any })),
+      getProductById: jest.fn().mockReturnValue(of(mockProduct)),
+      updateProduct: jest.fn().mockReturnValue(of({ data: mockProduct })),
     };
 
     await TestBed.configureTestingModule({
@@ -21,6 +32,7 @@ describe('ProductFormComponent', () => {
       providers: [
         provideRouter([]),
         { provide: ProductService, useValue: productService },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: (k: string) => (k === 'id' ? null : null) } } } },
       ],
     }).compileComponents();
 
@@ -96,4 +108,39 @@ describe('ProductFormComponent', () => {
   it('getError returns message for required', () => {
     expect(component.getError('id', 'required')).toBe('Este campo es requerido!');
   });
+
+  it('in edit mode should load product, patch form, disable id and call updateProduct on submit', fakeAsync(() => {
+    TestBed.resetTestingModule();
+    const editService = {
+      verifyProductId: jest.fn().mockReturnValue(of(false)),
+      createProduct: jest.fn(),
+      getProductById: jest.fn().mockReturnValue(of(mockProduct)),
+      updateProduct: jest.fn().mockReturnValue(of({ data: mockProduct })),
+    };
+    TestBed.configureTestingModule({
+      imports: [ProductFormComponent],
+      providers: [
+        provideRouter([]),
+        { provide: ProductService, useValue: editService },
+        { provide: ActivatedRoute, useValue: { snapshot: { paramMap: { get: (k: string) => (k === 'id' ? 'prod-edit' : null) } } } },
+      ],
+    }).compileComponents();
+
+    const editRouter = TestBed.inject(Router);
+    jest.spyOn(editRouter, 'navigate').mockResolvedValue(true);
+    const editFixture = TestBed.createComponent(ProductFormComponent);
+    const editComponent = editFixture.componentInstance;
+    editFixture.detectChanges();
+    tick(500); // allow getProductById and any async validators to complete
+    editFixture.detectChanges();
+
+    expect(editService.getProductById).toHaveBeenCalledWith('prod-edit');
+    expect(editComponent.form.get('id')?.value).toBe('prod-edit');
+    expect(editComponent.form.get('name')?.value).toBe(mockProduct.name);
+    expect(editComponent.form.get('id')?.disabled).toBe(true);
+    editComponent.form.get('name')?.setValue('Updated Name');
+    editComponent.onSubmit();
+    expect(editService.updateProduct).toHaveBeenCalledWith('prod-edit', expect.objectContaining({ name: 'Updated Name' }));
+    expect(editService.createProduct).not.toHaveBeenCalled();
+  }));
 });

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { Router, provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../../../../core/services/product.service';
@@ -118,6 +118,26 @@ describe('ProductListComponent', () => {
       expect(component.filteredProductCount()).toBe(0);
       const emptyText = fixture.nativeElement.querySelector('.product-list-message--empty');
       expect(emptyText?.textContent?.trim()).toContain('No hay productos que coincidan con la búsqueda');
+      done();
+    });
+  });
+
+  it('should open dropdown when clicking three-dots and navigate to edit on Editar (F5)', (done) => {
+    const router = TestBed.inject(Router);
+    const navigateSpy = jest.spyOn(router, 'navigate').mockResolvedValue(true);
+    fixture.whenStable().then(() => {
+      fixture.detectChanges();
+      const firstRowActions = fixture.nativeElement.querySelector('.product-table__actions');
+      expect(firstRowActions).toBeTruthy();
+      firstRowActions.click();
+      fixture.detectChanges();
+      expect(component.openMenuId()).toBe('prod-1');
+      const editarLink = fixture.nativeElement.querySelector('.product-table__dropdown-item');
+      expect(editarLink?.textContent?.trim()).toBe('Editar');
+      editarLink.click();
+      fixture.detectChanges();
+      expect(component.openMenuId()).toBeNull();
+      expect(navigateSpy).toHaveBeenCalledWith(['/products', 'edit', 'prod-1']);
       done();
     });
   });

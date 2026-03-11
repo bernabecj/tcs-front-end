@@ -21,6 +21,19 @@
   text-align: center;
 }
 
+.product-form-message {
+  margin: 0 0 1rem 0;
+  font-size: 0.9375rem;
+}
+
+.product-form-message--loading {
+  color: #6c757d;
+}
+
+.product-form-message--error {
+  color: #dc3545;
+}
+
 .product-form__row {
   display: grid;
   grid-template-columns: 1fr 1fr;

@@ -110,6 +110,15 @@
     border-radius: 50%;
   }
 
+  .product-table__actions-cell {
+    position: relative;
+  }
+
+  .product-table__actions-wrap {
+    position: relative;
+    display: inline-block;
+  }
+
   .product-table__actions {
     display: flex;
     align-items: center;
@@ -125,6 +134,32 @@
   .product-table__actions:hover {
     background: #e9ecef;
     color: #333;
+  }
+
+  .product-table__dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+    min-width: 120px;
+    padding: 0.25rem 0;
+    background: #fff;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .product-table__dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    color: #333;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .product-table__dropdown-item:hover {
+    background: #f8f9fa;
   }
 }
 

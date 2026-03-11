@@ -1,6 +1,6 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { ProductService } from '../../../../core/services/product.service';
 import { Product } from '../../../../core/models/product.model';
 import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
@@ -74,14 +74,29 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
                   <td>{{ product.description }}</td>
                   <td>{{ product.date_release | dateFormat }}</td>
                   <td>{{ product.date_revision | dateFormat }}</td>
-                  <td>
-                    <button type="button" class="product-table__actions" aria-label="Opciones">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <circle cx="12" cy="6" r="1.5"/>
-                        <circle cx="12" cy="12" r="1.5"/>
-                        <circle cx="12" cy="18" r="1.5"/>
-                      </svg>
-                    </button>
+                  <td class="product-table__actions-cell">
+                    <div class="product-table__actions-wrap">
+                      <button
+                        type="button"
+                        class="product-table__actions"
+                        aria-label="Opciones"
+                        (click)="toggleMenu(product.id)"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                          <circle cx="12" cy="6" r="1.5"/>
+                          <circle cx="12" cy="12" r="1.5"/>
+                          <circle cx="12" cy="18" r="1.5"/>
+                        </svg>
+                      </button>
+                      @if (openMenuId() === product.id) {
+                        <div class="product-table__dropdown">
+                          <a
+                            class="product-table__dropdown-item"
+                            (click)="goToEdit(product.id)"
+                          >Editar</a>
+                        </div>
+                      }
+                    </div>
                   </td>
                 </tr>
               }
@@ -108,6 +123,7 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
 })
 export class ProductListComponent {
   private readonly productService = inject(ProductService);
+  private readonly router = inject(Router);
 
   readonly products = signal<Product[]>([]);
   readonly loading = signal(true);
@@ -115,6 +131,8 @@ export class ProductListComponent {
   readonly searchTerm = signal('');
   readonly pageSize = signal(5);
   readonly logoErrors = signal<Set<string>>(new Set());
+  /** Id of the product row whose actions menu is open, or null. */
+  readonly openMenuId = signal<string | null>(null);
 
   /** Products matching the current search term (before page size slice). */
   readonly filteredProducts = computed(() => {
@@ -164,6 +182,23 @@ export class ProductListComponent {
   onPageSizeChange(event: Event): void {
     const select = event.target as HTMLSelectElement;
     this.pageSize.set(Number(select.value));
+  }
+
+  toggleMenu(productId: string): void {
+    this.openMenuId.update((current) => (current === productId ? null : productId));
+  }
+
+  goToEdit(productId: string): void {
+    this.openMenuId.set(null);
+    this.router.navigate(['/products', 'edit', productId]);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (this.openMenuId() && !target.closest('.product-table__actions-cell')) {
+      this.openMenuId.set(null);
+    }
   }
 
   private loadProducts(): void {

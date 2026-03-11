@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors, AsyncValidatorFn } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { map, debounceTime, distinctUntilChanged, switchMap, of, merge, first } from 'rxjs';
 import { ProductService } from '../../../../core/services/product.service';
 import { MessageNotificationService } from '../../../../core/services/message-notification.service';
@@ -28,16 +28,23 @@ function idExistsValidator(productService: ProductService): AsyncValidatorFn {
   templateUrl: './product-form.component.html',
   styleUrls: ['./product-form.component.scss'],
 })
-export class ProductFormComponent {
+export class ProductFormComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductService);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
   private readonly notificationService = inject(MessageNotificationService);
 
   form: FormGroup;
   submitting = false;
-  /** True after the user has clicked Agregar at least once; validation messages show only then. */
+  /** True after the user has clicked submit at least once; validation messages show only then. */
   submitAttempted = false;
+
+  /** Set when editing an existing product (from route param :id). */
+  readonly productId = signal<string | null>(null);
+  readonly isEditMode = computed(() => this.productId() != null);
+  readonly loadingProduct = signal(false);
+  readonly loadError = signal<string | null>(null);
 
   constructor() {
     this.form = this.fb.group({
@@ -64,6 +71,32 @@ export class ProductFormComponent {
         this.form.get('date_revision')?.setValue(next, { emitEvent: false });
       }
     });
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.productId.set(id);
+      this.loadingProduct.set(true);
+      this.productService.getProductById(id).subscribe({
+        next: (product) => {
+          this.form.patchValue({
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            logo: product.logo,
+            date_release: product.date_release,
+            date_revision: product.date_revision,
+          });
+          this.form.get('id')?.disable();
+          this.loadingProduct.set(false);
+        },
+        error: () => {
+          this.loadError.set('No se pudo cargar el producto.');
+          this.loadingProduct.set(false);
+        },
+      });
+    }
   }
 
   hasError(controlName: string, errorCode: string): boolean {
@@ -105,15 +138,30 @@ export class ProductFormComponent {
       return;
     }
     this.submitting = true;
-    const value = this.form.value;
-    this.productService.createProduct(value).subscribe({
-      next: () => {
-        this.submitting = false;
-        this.router.navigate(['/products']);
-      },
-      error: () => {
-        this.submitting = false;
-      },
-    });
+    const id = this.productId();
+    if (id) {
+      const raw = this.form.getRawValue();
+      const payload = { name: raw.name, description: raw.description, logo: raw.logo, date_release: raw.date_release, date_revision: raw.date_revision };
+      this.productService.updateProduct(id, payload).subscribe({
+        next: () => {
+          this.submitting = false;
+          this.router.navigate(['/products']);
+        },
+        error: () => {
+          this.submitting = false;
+        },
+      });
+    } else {
+      const value = this.form.value;
+      this.productService.createProduct(value).subscribe({
+        next: () => {
+          this.submitting = false;
+          this.router.navigate(['/products']);
+        },
+        error: () => {
+          this.submitting = false;
+        },
+      });
+    }
   }
 }
