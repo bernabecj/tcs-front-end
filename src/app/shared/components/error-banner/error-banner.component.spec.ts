@@ -29,11 +29,11 @@ describe('ErrorBannerComponent', () => {
     expect(banner).toBeNull();
   });
 
-  it('should show error message when set', () => {
-    errorService.setError('Something went wrong');
+  it('should show generic message when error is set', () => {
+    errorService.setError('Algo salió mal.');
     fixture.detectChanges();
     const text = fixture.nativeElement.querySelector('.error-banner__text');
-    expect(text?.textContent?.trim()).toBe('Something went wrong');
+    expect(text?.textContent?.trim()).toBe('Algo salió mal.');
   });
 
   it('should clear error when dismiss is clicked', () => {

@@ -20,10 +20,11 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('financial-products');
   });
 
-  it('should render error banner and router outlet', () => {
+  it('should render header, error banner and router outlet', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('app-header')).toBeTruthy();
     expect(compiled.querySelector('app-error-banner')).toBeTruthy();
     expect(compiled.querySelector('router-outlet')).toBeTruthy();
   });

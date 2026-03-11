@@ -28,11 +28,11 @@ describe('httpErrorInterceptor', () => {
     errorService.clear();
   });
 
-  it('should set error message on 404', (done) => {
+  it('should set generic message on 404', (done) => {
     http.get('/api/test').subscribe({
       error: () => {
         errorService.message$.subscribe((msg) => {
-          expect(msg).toBe('Not found');
+          expect(msg).toBe('Algo salió mal. Intenta nuevamente.');
           done();
         });
       },

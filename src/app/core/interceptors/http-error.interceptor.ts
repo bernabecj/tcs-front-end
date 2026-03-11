@@ -2,53 +2,23 @@ import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { catchError, throwError } from 'rxjs';
 import { ErrorNotificationService } from '../services/error-notification.service';
+import { LoggingService } from '../services/logging.service';
 
-interface ApiErrorResponse {
-  name?: string;
-  message?: string;
-  errors?: Record<string, string[]>;
-}
-
-function getErrorMessage(err: HttpErrorResponse): string {
-  if (err.error instanceof ErrorEvent) {
-    return 'Error de conexión. Verifica tu conexión a internet.';
-  }
-
-  const body = err.error as ApiErrorResponse | null;
-  const status = err.status;
-
-  if (body?.message) {
-    return body.message;
-  }
-
-  if (body?.errors && typeof body.errors === 'object') {
-    const messages = Object.values(body.errors).flat().filter(Boolean);
-    if (messages.length > 0) {
-      return messages.join('. ');
-    }
-  }
-
-  switch (status) {
-    case 0:
-      return 'No se pudo conectar con el servidor. Verifica que el backend esté en ejecución en http://localhost:3002';
-    case 400:
-      return 'Solicitud inválida. Revisa los datos ingresados.';
-    case 404:
-      return 'Recurso no encontrado.';
-    case 500:
-      return 'Error del servidor. Intenta más tarde.';
-    default:
-      return `Error inesperado (${status}).`;
-  }
-}
+const GENERIC_MESSAGE = 'Algo salió mal. Intenta nuevamente.';
 
 export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const errorService = inject(ErrorNotificationService);
+  const logging = inject(LoggingService);
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
-      const message = getErrorMessage(err);
-      errorService.setError(message);
+      logging.logError('API Error', {
+        url: err.url,
+        status: err.status,
+        message: err.message,
+        error: err.error,
+      });
+      errorService.setError(GENERIC_MESSAGE);
       return throwError(() => err);
     })
   );

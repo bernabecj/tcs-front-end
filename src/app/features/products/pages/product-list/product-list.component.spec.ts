@@ -49,8 +49,8 @@ describe('ProductListComponent', () => {
       fixture.detectChanges();
       expect(component.products()).toEqual(mockProducts);
       expect(component.loading()).toBe(false);
-      const cards = fixture.nativeElement.querySelectorAll('app-product-card');
-      expect(cards.length).toBe(1);
+      const rows = fixture.nativeElement.querySelectorAll('.product-table tbody tr');
+      expect(rows.length).toBe(1);
       done();
     });
   });
@@ -61,8 +61,8 @@ describe('ProductListComponent', () => {
     newFixture.detectChanges();
     newFixture.whenStable().then(() => {
       newFixture.detectChanges();
-      const errorText = newFixture.nativeElement.querySelector('.product-list__error');
-      expect(errorText?.textContent?.trim()).toContain('No se pudieron cargar');
+      const errorText = newFixture.nativeElement.querySelector('.product-list-message--error');
+      expect(errorText?.textContent?.trim()).toContain('Algo salió mal');
       done();
     });
   });
@@ -73,7 +73,7 @@ describe('ProductListComponent', () => {
     newFixture.detectChanges();
     newFixture.whenStable().then(() => {
       newFixture.detectChanges();
-      const emptyText = newFixture.nativeElement.querySelector('.product-list__empty');
+      const emptyText = newFixture.nativeElement.querySelector('.product-list-message--empty');
       expect(emptyText?.textContent?.trim()).toContain('No hay productos');
       done();
     });
