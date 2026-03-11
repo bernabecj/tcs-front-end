@@ -47,6 +47,15 @@ describe('MessageNotificationComponent', () => {
     expect(text?.textContent?.trim()).toBe('Corrige los campos.');
   });
 
+  it('should show success message and success style when setSuccess is set', () => {
+    notificationService.setSuccess('Producto guardado.');
+    fixture.detectChanges();
+    const banner = fixture.nativeElement.querySelector('.alert-banner');
+    const text = fixture.nativeElement.querySelector('.alert-banner__text');
+    expect(banner?.classList.contains('alert-banner--success')).toBe(true);
+    expect(text?.textContent?.trim()).toBe('Producto guardado.');
+  });
+
   it('should clear when dismiss is clicked', () => {
     notificationService.setError('Error');
     fixture.detectChanges();

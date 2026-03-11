@@ -28,7 +28,7 @@
           @if (hasError('id', 'maxlength')) {
             <span class="product-form__error">{{ getError('id', 'maxlength') }}</span>
           }
-          @if (hasError('id', 'idExists')) {
+          @if (hasError('id', 'idExists') && !isEditMode()) {
             <span class="product-form__error">{{ getError('id', 'idExists') }}</span>
           }
         </div>
@@ -125,7 +125,9 @@
 
       <div class="product-form__actions">
         <a routerLink="/products" class="btn-link">Cancelar</a>
-        <button type="button" class="btn-secondary" (click)="reiniciar()">Reiniciar</button>
+        @if (!isEditMode()) {
+          <button type="button" class="btn-secondary" (click)="reiniciar()">Reiniciar</button>
+        }
         <button type="submit" class="btn-primary" [disabled]="submitting">
           {{ submitting ? (isEditMode() ? 'Guardando...' : 'Enviando...') : (isEditMode() ? 'Guardar' : 'Agregar') }}
         </button>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
-export type NotificationType = 'error' | 'warning';
+export type NotificationType = 'error' | 'warning' | 'success';
 
 export interface Notification {
   message: string;
@@ -29,6 +29,10 @@ export class MessageNotificationService {
 
   setWarning(message: string, autoDismissMs: number = this.defaultAutoDismissMs): void {
     this._notification$.next({ message, type: 'warning', autoDismissMs });
+  }
+
+  setSuccess(message: string, autoDismissMs: number = this.defaultAutoDismissMs): void {
+    this._notification$.next({ message, type: 'success', autoDismissMs });
   }
 
   clear(): void {

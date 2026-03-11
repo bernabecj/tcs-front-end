@@ -88,7 +88,10 @@ export class ProductFormComponent implements OnInit {
             date_release: product.date_release,
             date_revision: product.date_revision,
           });
-          this.form.get('id')?.disable();
+          const idControl = this.form.get('id');
+          idControl?.clearAsyncValidators();
+          idControl?.updateValueAndValidity({ emitEvent: false });
+          idControl?.disable();
           this.loadingProduct.set(false);
         },
         error: () => {
@@ -119,7 +122,7 @@ export class ProductFormComponent implements OnInit {
     if (errorCode === 'required') return 'Este campo es requerido!';
     if (errorCode === 'minlength') return `Mínimo ${c.errors['minlength'].requiredLength} caracteres.`;
     if (errorCode === 'maxlength') return `Máximo ${c.errors['maxlength'].requiredLength} caracteres.`;
-    if (errorCode === 'idExists') return 'ID ya existe.';
+    if (errorCode === 'idExists') return 'Este ID ya está registrado.';
     if (errorCode === 'dateReleaseMinToday') return 'La fecha debe ser igual o mayor a hoy.';
     if (errorCode === 'dateRevisionOneYear') return 'Debe ser exactamente un año después de la fecha de liberación.';
     return '';
@@ -134,7 +137,7 @@ export class ProductFormComponent implements OnInit {
     this.submitAttempted = true;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notificationService.setWarning('Corrige los campos del formulario.', 3000);
+      this.notificationService.setWarning('Por favor, revisa los campos del formulario.', 3000);
       return;
     }
     this.submitting = true;
@@ -145,6 +148,7 @@ export class ProductFormComponent implements OnInit {
       this.productService.updateProduct(id, payload).subscribe({
         next: () => {
           this.submitting = false;
+          this.notificationService.setSuccess('Producto actualizado correctamente.');
           this.router.navigate(['/products']);
         },
         error: () => {
@@ -156,6 +160,7 @@ export class ProductFormComponent implements OnInit {
       this.productService.createProduct(value).subscribe({
         next: () => {
           this.submitting = false;
+          this.notificationService.setSuccess('Producto agregado correctamente.');
           this.router.navigate(['/products']);
         },
         error: () => {

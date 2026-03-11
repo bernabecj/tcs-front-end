@@ -36,6 +36,14 @@ describe('MessageNotificationService', () => {
     });
   });
 
+  it('should emit success with autoDismiss when setSuccess is called', (done) => {
+    service.setSuccess('Producto guardado.');
+    service.notification$.subscribe((n) => {
+      expect(n).toEqual({ message: 'Producto guardado.', type: 'success', autoDismissMs: 3000 });
+      done();
+    });
+  });
+
   it('should clear when clear is called', (done) => {
     service.setError('Test error');
     service.clear();

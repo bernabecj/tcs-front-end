@@ -13,9 +13,10 @@ import { MessageNotificationService } from '../../../core/services/message-notif
         class="alert-banner"
         [class.alert-banner--error]="n.type === 'error'"
         [class.alert-banner--warning]="n.type === 'warning'"
+        [class.alert-banner--success]="n.type === 'success'"
         role="alert"
       >
-        <span class="alert-banner__icon" aria-hidden="true">{{ n.type === 'warning' ? '!' : '!' }}</span>
+        <span class="alert-banner__icon" aria-hidden="true">{{ n.type === 'success' ? '✓' : '!' }}</span>
         <span class="alert-banner__text">{{ n.message }}</span>
         <button type="button" class="alert-banner__close" (click)="dismiss()" aria-label="Cerrar">&times;</button>
       </div>
@@ -55,6 +56,14 @@ import { MessageNotificationService } from '../../../core/services/message-notif
 
       .alert-banner--warning .alert-banner__icon {
         background: #f0ad4e;
+      }
+
+      .alert-banner--success {
+        border-left: 3px solid #28a745;
+      }
+
+      .alert-banner--success .alert-banner__icon {
+        background: #28a745;
       }
 
       .alert-banner__icon {
