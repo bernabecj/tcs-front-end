@@ -18,6 +18,7 @@
             formControlName="id"
             class="product-form__input"
             [class.product-form__input--error]="showControlError('id')"
+            placeholder="Ej. 001 o PROD01"
           />
           @if (hasError('id', 'required')) {
             <span class="product-form__error">{{ getError('id', 'required') }}</span>
@@ -40,6 +41,7 @@
             formControlName="name"
             class="product-form__input"
             [class.product-form__input--error]="showControlError('name')"
+            placeholder="Ej. Tarjeta Gold"
           />
           @if (hasError('name', 'required')) {
             <span class="product-form__error">{{ getError('name', 'required') }}</span>
@@ -62,6 +64,7 @@
             formControlName="description"
             class="product-form__input"
             [class.product-form__input--error]="showControlError('description')"
+            placeholder="Ej. Producto premium"
           />
           @if (hasError('description', 'required')) {
             <span class="product-form__error">{{ getError('description', 'required') }}</span>
@@ -81,6 +84,7 @@
             formControlName="logo"
             class="product-form__input"
             [class.product-form__input--error]="showControlError('logo')"
+            placeholder="https://ejemplo.com/logo.png"
           />
           @if (hasError('logo', 'required')) {
             <span class="product-form__error">{{ getError('logo', 'required') }}</span>
@@ -97,6 +101,7 @@
             formControlName="date_release"
             class="product-form__input"
             [class.product-form__input--error]="showControlError('date_release')"
+            placeholder="YYYY-MM-DD"
           />
           @if (hasError('date_release', 'required')) {
             <span class="product-form__error">{{ getError('date_release', 'required') }}</span>
@@ -113,6 +118,7 @@
             formControlName="date_revision"
             class="product-form__input"
             [class.product-form__input--error]="showControlError('date_revision')"
+            placeholder="YYYY-MM-DD"
           />
           @if (hasError('date_revision', 'required')) {
             <span class="product-form__error">{{ getError('date_revision', 'required') }}</span>

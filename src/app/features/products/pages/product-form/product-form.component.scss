@@ -61,6 +61,15 @@
   background: #fff;
 }
 
+/* Keep white background when browser autofill or autocomplete selection is applied */
+.product-form__input:-webkit-autofill,
+.product-form__input:-webkit-autofill:hover,
+.product-form__input:-webkit-autofill:focus,
+.product-form__input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #fff inset;
+  box-shadow: 0 0 0 30px #fff inset;
+}
+
 .product-form__input:focus {
   outline: none;
   border-color: #adb5bd;
