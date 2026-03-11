@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractContro
 import { Router, RouterLink } from '@angular/router';
 import { map, debounceTime, distinctUntilChanged, switchMap, of, merge, first } from 'rxjs';
 import { ProductService } from '../../../../core/services/product.service';
+import { MessageNotificationService } from '../../../../core/services/message-notification.service';
 import { dateReleaseMinToday, dateRevisionOneYearAfter } from '../../validators/product-form.validators';
 
 function idExistsValidator(productService: ProductService): AsyncValidatorFn {
@@ -31,6 +32,7 @@ export class ProductFormComponent {
   private readonly fb = inject(FormBuilder);
   private readonly productService = inject(ProductService);
   private readonly router = inject(Router);
+  private readonly notificationService = inject(MessageNotificationService);
 
   form: FormGroup;
   submitting = false;
@@ -99,6 +101,7 @@ export class ProductFormComponent {
     this.submitAttempted = true;
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      this.notificationService.setWarning('Corrige los campos del formulario.', 3000);
       return;
     }
     this.submitting = true;

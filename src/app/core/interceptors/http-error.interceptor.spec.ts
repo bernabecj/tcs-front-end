@@ -3,35 +3,35 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { HttpClient } from '@angular/common/http';
 import { httpErrorInterceptor } from './http-error.interceptor';
-import { ErrorNotificationService } from '../services/error-notification.service';
+import { MessageNotificationService } from '../services/message-notification.service';
 
 describe('httpErrorInterceptor', () => {
   let httpMock: HttpTestingController;
   let http: HttpClient;
-  let errorService: ErrorNotificationService;
+  let notificationService: MessageNotificationService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([httpErrorInterceptor])),
         provideHttpClientTesting(),
-        ErrorNotificationService,
+        MessageNotificationService,
       ],
     });
     httpMock = TestBed.inject(HttpTestingController);
     http = TestBed.inject(HttpClient);
-    errorService = TestBed.inject(ErrorNotificationService);
+    notificationService = TestBed.inject(MessageNotificationService);
   });
 
   afterEach(() => {
     httpMock.verify();
-    errorService.clear();
+    notificationService.clear();
   });
 
   it('should set generic message on 404', (done) => {
     http.get('/api/test').subscribe({
       error: () => {
-        errorService.message$.subscribe((msg) => {
+        notificationService.message$.subscribe((msg) => {
           expect(msg).toBe('Algo salió mal. Intenta nuevamente.');
           done();
         });
