@@ -1,5 +1,6 @@
 import { Component, inject, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { ProductService } from '../../../../core/services/product.service';
 import { Product } from '../../../../core/models/product.model';
 import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
@@ -7,7 +8,7 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
 @Component({
   selector: 'app-product-list',
   standalone: true,
-  imports: [CommonModule, DateFormatPipe],
+  imports: [CommonModule, RouterLink, DateFormatPipe],
   template: `
     <div class="product-list-page">
       <div class="product-list-card">
@@ -19,7 +20,7 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
             [value]="searchTerm()"
             (input)="onSearchInput($event)"
           />
-          <button type="button" class="btn-add">Agregar</button>
+          <a routerLink="/products/add" class="btn-primary">Agregar</a>
         </div>
 
         @if (loading()) {

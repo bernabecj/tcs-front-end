@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { of, throwError } from 'rxjs';
 import { ProductListComponent } from './product-list.component';
 import { ProductService } from '../../../../core/services/product.service';
@@ -27,7 +28,7 @@ describe('ProductListComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ProductListComponent],
-      providers: [{ provide: ProductService, useValue: productService }],
+      providers: [provideRouter([]), { provide: ProductService, useValue: productService }],
     }).compileComponents();
 
     productService.getProducts.mockReturnValue(of({ data: mockProducts }));
@@ -55,16 +56,14 @@ describe('ProductListComponent', () => {
     });
   });
 
-  it('should display error message when API fails', (done) => {
+  it('should display error message when API fails', async () => {
     productService.getProducts.mockReturnValue(throwError(() => new Error('Network error')));
     const newFixture = TestBed.createComponent(ProductListComponent);
     newFixture.detectChanges();
-    newFixture.whenStable().then(() => {
-      newFixture.detectChanges();
-      const errorText = newFixture.nativeElement.querySelector('.product-list-message--error');
-      expect(errorText?.textContent?.trim()).toContain('Algo salió mal');
-      done();
-    });
+    await newFixture.whenStable();
+    newFixture.detectChanges();
+    const errorText = newFixture.nativeElement.querySelector('.product-list-message--error');
+    expect(errorText?.textContent?.trim()).toContain('No se pudieron cargar los productos');
   });
 
   it('should display empty message when no products', (done) => {

@@ -1,0 +1,129 @@
+<div class="product-form-page">
+  <div class="product-form-card">
+    <h2 class="product-form-title">Formulario de Registro</h2>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="product-form">
+      <div class="product-form__row">
+        <div class="product-form__field">
+          <label for="id">ID</label>
+          <input
+            id="id"
+            type="text"
+            formControlName="id"
+            class="product-form__input"
+            [class.product-form__input--error]="showControlError('id')"
+          />
+          @if (hasError('id', 'required')) {
+            <span class="product-form__error">{{ getError('id', 'required') }}</span>
+          }
+          @if (hasError('id', 'minlength')) {
+            <span class="product-form__error">{{ getError('id', 'minlength') }}</span>
+          }
+          @if (hasError('id', 'maxlength')) {
+            <span class="product-form__error">{{ getError('id', 'maxlength') }}</span>
+          }
+          @if (hasError('id', 'idExists')) {
+            <span class="product-form__error">{{ getError('id', 'idExists') }}</span>
+          }
+        </div>
+        <div class="product-form__field">
+          <label for="name">Nombre</label>
+          <input
+            id="name"
+            type="text"
+            formControlName="name"
+            class="product-form__input"
+            [class.product-form__input--error]="showControlError('name')"
+          />
+          @if (hasError('name', 'required')) {
+            <span class="product-form__error">{{ getError('name', 'required') }}</span>
+          }
+          @if (hasError('name', 'minlength')) {
+            <span class="product-form__error">{{ getError('name', 'minlength') }}</span>
+          }
+          @if (hasError('name', 'maxlength')) {
+            <span class="product-form__error">{{ getError('name', 'maxlength') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="product-form__row">
+        <div class="product-form__field">
+          <label for="description">Descripción</label>
+          <input
+            id="description"
+            type="text"
+            formControlName="description"
+            class="product-form__input"
+            [class.product-form__input--error]="showControlError('description')"
+          />
+          @if (hasError('description', 'required')) {
+            <span class="product-form__error">{{ getError('description', 'required') }}</span>
+          }
+          @if (hasError('description', 'minlength')) {
+            <span class="product-form__error">{{ getError('description', 'minlength') }}</span>
+          }
+          @if (hasError('description', 'maxlength')) {
+            <span class="product-form__error">{{ getError('description', 'maxlength') }}</span>
+          }
+        </div>
+        <div class="product-form__field">
+          <label for="logo">Logo</label>
+          <input
+            id="logo"
+            type="text"
+            formControlName="logo"
+            class="product-form__input"
+            [class.product-form__input--error]="showControlError('logo')"
+          />
+          @if (hasError('logo', 'required')) {
+            <span class="product-form__error">{{ getError('logo', 'required') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="product-form__row">
+        <div class="product-form__field">
+          <label for="date_release">Fecha Liberación</label>
+          <input
+            id="date_release"
+            type="date"
+            formControlName="date_release"
+            class="product-form__input"
+            [class.product-form__input--error]="showControlError('date_release')"
+          />
+          @if (hasError('date_release', 'required')) {
+            <span class="product-form__error">{{ getError('date_release', 'required') }}</span>
+          }
+          @if (hasError('date_release', 'dateReleaseMinToday')) {
+            <span class="product-form__error">{{ getError('date_release', 'dateReleaseMinToday') }}</span>
+          }
+        </div>
+        <div class="product-form__field">
+          <label for="date_revision">Fecha Revisión</label>
+          <input
+            id="date_revision"
+            type="date"
+            formControlName="date_revision"
+            class="product-form__input"
+            [class.product-form__input--error]="showControlError('date_revision')"
+          />
+          @if (hasError('date_revision', 'required')) {
+            <span class="product-form__error">{{ getError('date_revision', 'required') }}</span>
+          }
+          @if (hasError('date_revision', 'dateRevisionOneYear')) {
+            <span class="product-form__error">{{ getError('date_revision', 'dateRevisionOneYear') }}</span>
+          }
+        </div>
+      </div>
+
+      <div class="product-form__actions">
+        <a routerLink="/products" class="btn-link">Cancelar</a>
+        <button type="button" class="btn-secondary" (click)="reiniciar()">Reiniciar</button>
+        <button type="submit" class="btn-primary" [disabled]="submitting">
+          {{ submitting ? 'Enviando...' : 'Agregar' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

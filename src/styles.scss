@@ -1,4 +1,6 @@
 /* Global styles */
+@use 'app/shared/styles/buttons' as *;
+
 *,
 *::before,
 *::after {
