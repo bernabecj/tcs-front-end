@@ -12,12 +12,7 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
-      logging.logError('API Error', {
-        url: err.url,
-        status: err.status,
-        message: err.message,
-        error: err.error,
-      });
+      logging.logError('API Error', err);
       errorService.setError(GENERIC_MESSAGE);
       return throwError(() => err);
     })
