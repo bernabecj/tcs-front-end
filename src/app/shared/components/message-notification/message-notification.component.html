@@ -1,4 +1,4 @@
-@if (notification(); as n) {
+<ng-container *ngIf="notification() as n">
   <div
     class="alert-banner"
     [class.alert-banner--error]="n.type === 'error'"
@@ -10,4 +10,4 @@
     <span class="alert-banner__text">{{ n.message }}</span>
     <button type="button" class="alert-banner__close" (click)="dismiss()" aria-label="Cerrar">&times;</button>
   </div>
-}
+</ng-container>

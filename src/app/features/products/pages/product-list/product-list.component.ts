@@ -57,6 +57,10 @@ export class ProductListComponent {
     this.logoErrors.update((set) => new Set(set).add(id));
   }
 
+  trackByProductId(_index: number, product: Product): string {
+    return product.id;
+  }
+
   getInitials(name: string): string {
     const words = name.trim().split(/\s+/);
     if (words.length >= 2) {
