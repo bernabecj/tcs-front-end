@@ -1,0 +1,14 @@
+<article class="product-card">
+  <div class="product-card__logo">
+    <img
+      [src]="product().logo"
+      [alt]="product().name"
+      class="product-card__img"
+      (error)="onImgError($event)"
+    />
+  </div>
+  <div class="product-card__body">
+    <h3 class="product-card__title">{{ product().name }}</h3>
+    <p class="product-card__description">{{ product().description }}</p>
+  </div>
+</article>

@@ -9,116 +9,7 @@ import { DateFormatPipe } from '../../../../shared/pipes/date-format.pipe';
   selector: 'app-product-list',
   standalone: true,
   imports: [CommonModule, RouterLink, DateFormatPipe],
-  template: `
-    <div class="product-list-page">
-      <div class="product-list-card">
-        <div class="product-list-toolbar">
-          <input
-            type="text"
-            class="product-list-search"
-            placeholder="Buscar por nombre o descripción..."
-            [value]="searchTerm()"
-            (input)="onSearchInput($event)"
-          />
-          <a routerLink="/products/add" class="btn-primary">Agregar</a>
-        </div>
-
-        @if (loading()) {
-          <p class="product-list-message product-list-message--loading">Cargando productos...</p>
-        } @else if (error()) {
-          <p class="product-list-message product-list-message--error">{{ error() }}</p>
-        } @else if (displayedProducts().length === 0) {
-          <p class="product-list-message product-list-message--empty">
-            {{ filteredProductCount() === 0 && products().length > 0 ? 'No hay productos que coincidan con la búsqueda.' : 'No hay productos para mostrar.' }}
-          </p>
-        } @else {
-          <table class="product-table">
-            <thead>
-              <tr>
-                <th>Logo</th>
-                <th>Nombre del producto</th>
-                <th>
-                  Descripción
-                  <span class="product-table__info-icon" title="Descripción del producto" aria-label="Info">i</span>
-                </th>
-                <th>
-                  Fecha de liberación
-                  <span class="product-table__info-icon" title="Fecha de liberación del producto" aria-label="Info">i</span>
-                </th>
-                <th>
-                  Fecha de reestructuración
-                  <span class="product-table__info-icon" title="Fecha de reestructuración del producto" aria-label="Info">i</span>
-                </th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (product of displayedProducts(); track product.id) {
-                <tr>
-                  <td>
-                    <div class="product-table__logo">
-                      @if (!logoError(product.id)) {
-                        <img
-                          [src]="product.logo"
-                          [alt]="product.name"
-                          (error)="setLogoError(product.id)"
-                        />
-                      } @else {
-                        <span class="product-table__logo-fallback">
-                          {{ getInitials(product.name) }}
-                        </span>
-                      }
-                    </div>
-                  </td>
-                  <td>{{ product.name }}</td>
-                  <td>{{ product.description }}</td>
-                  <td>{{ product.date_release | dateFormat }}</td>
-                  <td>{{ product.date_revision | dateFormat }}</td>
-                  <td class="product-table__actions-cell">
-                    <div class="product-table__actions-wrap">
-                      <button
-                        type="button"
-                        class="product-table__actions"
-                        aria-label="Opciones"
-                        (click)="toggleMenu(product.id)"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                          <circle cx="12" cy="6" r="1.5"/>
-                          <circle cx="12" cy="12" r="1.5"/>
-                          <circle cx="12" cy="18" r="1.5"/>
-                        </svg>
-                      </button>
-                      @if (openMenuId() === product.id) {
-                        <div class="product-table__dropdown">
-                          <a
-                            class="product-table__dropdown-item"
-                            (click)="goToEdit(product.id)"
-                          >Editar</a>
-                        </div>
-                      }
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-
-          <div class="product-list-footer">
-            <span class="product-list-footer__count">{{ displayedProducts().length }} Resultados</span>
-            <select
-              class="product-list-footer__select"
-              [value]="pageSize()"
-              (change)="onPageSizeChange($event)"
-            >
-              <option value="5">5</option>
-              <option value="10">10</option>
-              <option value="20">20</option>
-            </select>
-          </div>
-        }
-      </div>
-    </div>
-  `,
+  templateUrl: './product-list.component.html',
   styleUrls: ['./product-list.component.scss'],
 })
 export class ProductListComponent {
@@ -199,6 +90,16 @@ export class ProductListComponent {
     if (this.openMenuId() && !target.closest('.product-table__actions-cell')) {
       this.openMenuId.set(null);
     }
+  }
+
+  /** Reload products (e.g. after error). */
+  retry(): void {
+    this.loadProducts();
+  }
+
+  /** Clear search term (used when empty search results). */
+  clearSearch(): void {
+    this.searchTerm.set('');
   }
 
   private loadProducts(): void {
