@@ -4,38 +4,6 @@ import { Component } from '@angular/core';
   selector: 'app-header',
   standalone: true,
   templateUrl: './app-header.component.html',
-  styles: [
-    `
-      .app-header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 1rem;
-        background: #fff;
-        border-bottom: 1px solid #e9ecef;
-      }
-
-      .app-header__icon {
-        color: #333;
-      }
-
-      .app-header__title {
-        font-size: 1.25rem;
-        font-weight: 700;
-        color: #333;
-        letter-spacing: 0.05em;
-      }
-
-      @media (max-width: 768px) {
-        .app-header {
-          padding: 0.75rem;
-        }
-        .app-header__title {
-          font-size: 1.125rem;
-        }
-      }
-    `,
-  ],
+  styleUrls: ['./app-header.component.scss'],
 })
 export class AppHeaderComponent {}
