@@ -8,7 +8,39 @@
     </ng-container>
     <ng-template #notLoadError>
       <ng-container *ngIf="loadingProduct(); else showForm">
-        <p class="product-form-message product-form-message--loading">Cargando producto...</p>
+        <div class="product-form-skeleton" aria-hidden="true">
+          <div class="product-form-skeleton__title"></div>
+          <div class="product-form__row">
+            <div class="product-form__field">
+              <span class="product-form-skeleton__label"></span>
+              <span class="product-form-skeleton__input"></span>
+            </div>
+            <div class="product-form__field">
+              <span class="product-form-skeleton__label"></span>
+              <span class="product-form-skeleton__input"></span>
+            </div>
+          </div>
+          <div class="product-form__row">
+            <div class="product-form__field">
+              <span class="product-form-skeleton__label"></span>
+              <span class="product-form-skeleton__input"></span>
+            </div>
+            <div class="product-form__field">
+              <span class="product-form-skeleton__label"></span>
+              <span class="product-form-skeleton__input"></span>
+            </div>
+          </div>
+          <div class="product-form__row">
+            <div class="product-form__field">
+              <span class="product-form-skeleton__label"></span>
+              <span class="product-form-skeleton__input"></span>
+            </div>
+            <div class="product-form__field">
+              <span class="product-form-skeleton__label"></span>
+              <span class="product-form-skeleton__input"></span>
+            </div>
+          </div>
+        </div>
       </ng-container>
       <ng-template #showForm>
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="product-form">

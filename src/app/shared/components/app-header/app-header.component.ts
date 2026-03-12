@@ -26,6 +26,15 @@ import { Component } from '@angular/core';
         color: #333;
         letter-spacing: 0.05em;
       }
+
+      @media (max-width: 768px) {
+        .app-header {
+          padding: 0.75rem;
+        }
+        .app-header__title {
+          font-size: 1.125rem;
+        }
+      }
     `,
   ],
 })
