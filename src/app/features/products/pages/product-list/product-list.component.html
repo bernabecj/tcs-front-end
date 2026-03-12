@@ -21,9 +21,10 @@
       <ng-container *ngIf="error(); else notError">
         <div class="product-list-state product-list-state--error" role="alert">
           <span class="product-list-state__icon product-list-state__icon--error" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/>
-              <path d="M12 8v4M12 16h.01"/>
+              <path d="M12 7v5"/>
+              <circle cx="12" cy="16" r="1.25" fill="currentColor" stroke="none"/>
             </svg>
           </span>
           <h3 class="product-list-state__title">No se pudo cargar el listado</h3>
