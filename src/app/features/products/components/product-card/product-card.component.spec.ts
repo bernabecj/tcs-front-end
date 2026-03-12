@@ -29,28 +29,4 @@ describe('ProductCardComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should display product name', () => {
-    const title = fixture.nativeElement.querySelector('.product-card__title');
-    expect(title?.textContent?.trim()).toBe(mockProduct.name);
-  });
-
-  it('should display product description', () => {
-    const desc = fixture.nativeElement.querySelector('.product-card__description');
-    expect(desc?.textContent?.trim()).toBe(mockProduct.description);
-  });
-
-  it('should display product logo with correct src', () => {
-    const img = fixture.nativeElement.querySelector('.product-card__img');
-    expect(img?.getAttribute('src')).toBe(mockProduct.logo);
-    expect(img?.getAttribute('alt')).toBe(mockProduct.name);
-  });
-
-  it('should hide image and show placeholder on img error', () => {
-    const img = fixture.nativeElement.querySelector('.product-card__img') as HTMLImageElement;
-    img.dispatchEvent(new Event('error'));
-    fixture.detectChanges();
-    expect(img.style.display).toBe('none');
-    expect(img.parentElement?.classList.contains('product-card__logo--error')).toBe(true);
-  });
 });

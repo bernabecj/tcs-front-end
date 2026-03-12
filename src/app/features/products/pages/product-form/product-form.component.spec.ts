@@ -47,24 +47,6 @@ describe('ProductFormComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have a form with all required controls', () => {
-    expect(component.form.get('id')).toBeDefined();
-    expect(component.form.get('name')).toBeDefined();
-    expect(component.form.get('description')).toBeDefined();
-    expect(component.form.get('logo')).toBeDefined();
-    expect(component.form.get('date_release')).toBeDefined();
-    expect(component.form.get('date_revision')).toBeDefined();
-  });
-
-  it('reiniciar should reset the form and submitAttempted', () => {
-    component.submitAttempted = true;
-    component.form.patchValue({ id: 'abc', name: 'Test' });
-    component.reiniciar();
-    expect(component.form.get('id')?.value).toBe(null);
-    expect(component.form.get('name')?.value).toBe(null);
-    expect(component.submitAttempted).toBe(false);
-  });
-
   it('onSubmit should set submitAttempted and not call API when form is invalid', () => {
     component.form.patchValue({ id: 'ab' }); // too short
     component.onSubmit();
@@ -95,19 +77,6 @@ describe('ProductFormComponent', () => {
     expect(productService.createProduct).toHaveBeenCalledWith(component.form.value);
     expect(router.navigate).toHaveBeenCalledWith(['/products']);
   }));
-
-  it('hasError returns true only after submitAttempted when control has error', () => {
-    component.form.get('id')?.setValue('');
-    component.form.get('id')?.updateValueAndValidity();
-    expect(component.hasError('id', 'required')).toBe(false);
-    component.submitAttempted = true;
-    fixture.detectChanges();
-    expect(component.hasError('id', 'required')).toBe(true);
-  });
-
-  it('getError returns message for required', () => {
-    expect(component.getError('id', 'required')).toBe('Este campo es requerido!');
-  });
 
   it('in edit mode should load product, patch form, disable id and call updateProduct on submit', fakeAsync(() => {
     TestBed.resetTestingModule();

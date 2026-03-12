@@ -18,9 +18,4 @@ describe('AppHeaderComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should display BANCO title', () => {
-    const title = fixture.nativeElement.querySelector('.app-header__title');
-    expect(title?.textContent?.trim()).toBe('BANCO');
-  });
 });

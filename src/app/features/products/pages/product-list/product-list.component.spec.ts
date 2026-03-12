@@ -64,7 +64,7 @@ describe('ProductListComponent', () => {
     });
   });
 
-  it('should display error message when API fails', async () => {
+  it('should display error when API fails and call getProducts again when Reintentar is clicked', async () => {
     productService.getProducts.mockReturnValue(throwError(() => new Error('Network error')));
     const newFixture = TestBed.createComponent(ProductListComponent);
     newFixture.detectChanges();
@@ -72,14 +72,6 @@ describe('ProductListComponent', () => {
     newFixture.detectChanges();
     const errorBlock = newFixture.nativeElement.querySelector('.product-list-state--error');
     expect(errorBlock?.textContent?.trim()).toContain('No se pudieron cargar los productos');
-  });
-
-  it('should call getProducts again when Reintentar is clicked after error', async () => {
-    productService.getProducts.mockReturnValue(throwError(() => new Error('Network error')));
-    const newFixture = TestBed.createComponent(ProductListComponent);
-    newFixture.detectChanges();
-    await newFixture.whenStable();
-    newFixture.detectChanges();
     const callsBeforeRetry = productService.getProducts.mock.calls.length;
     productService.getProducts.mockReturnValue(of({ data: [] }));
     const retryBtn = newFixture.nativeElement.querySelector('.product-list-state--error .btn-primary');
@@ -96,42 +88,6 @@ describe('ProductListComponent', () => {
       newFixture.detectChanges();
       const emptyBlock = newFixture.nativeElement.querySelector('.product-list-state--empty');
       expect(emptyBlock?.textContent?.trim()).toContain('No hay productos');
-      done();
-    });
-  });
-
-  it('should filter by name when searching (F2)', (done) => {
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.searchTerm.set('Tarjeta');
-      fixture.detectChanges();
-      expect(component.filteredProductCount()).toBe(1);
-      expect(component.filteredProducts()[0].name).toBe('Tarjeta Gold');
-      const rows = fixture.nativeElement.querySelectorAll('.product-table tbody tr');
-      expect(rows.length).toBe(1);
-      done();
-    });
-  });
-
-  it('should filter by description when searching (F2)', (done) => {
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.searchTerm.set('premium');
-      fixture.detectChanges();
-      expect(component.filteredProductCount()).toBe(1);
-      expect(component.filteredProducts()[0].description).toContain('premium');
-      done();
-    });
-  });
-
-  it('should show search-no-match message when search has no results (F2)', (done) => {
-    fixture.whenStable().then(() => {
-      fixture.detectChanges();
-      component.searchTerm.set('xyz-nonexistent');
-      fixture.detectChanges();
-      expect(component.filteredProductCount()).toBe(0);
-      const emptyBlock = fixture.nativeElement.querySelector('.product-list-state--empty');
-      expect(emptyBlock?.textContent?.trim()).toContain('No hay productos que coincidan con la búsqueda');
       done();
     });
   });

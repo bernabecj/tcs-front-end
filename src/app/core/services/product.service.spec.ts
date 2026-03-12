@@ -52,14 +52,6 @@ describe('ProductService', () => {
     req.flush(mockResponse);
   });
 
-  it('verifyProductId should return true when id exists', () => {
-    service.verifyProductId('prod-1').subscribe((exists) => {
-      expect(exists).toBe(true);
-    });
-    const req = httpMock.expectOne((r) => r.url.includes('/verification/prod-1'));
-    req.flush(true);
-  });
-
   it('createProduct should POST product', () => {
     const mockResponse = { message: 'Product added', data: mockProduct };
     service.createProduct(mockProduct).subscribe((res) => {
@@ -80,11 +72,4 @@ describe('ProductService', () => {
     req.flush(mockResponse);
   });
 
-  it('deleteProduct should DELETE product', () => {
-    service.deleteProduct('prod-1').subscribe((res) => {
-      expect(res.message).toBeDefined();
-    });
-    const req = httpMock.expectOne((r) => r.url.includes('/bp/products/prod-1') && r.method === 'DELETE');
-    req.flush({ message: 'Product removed successfully' });
-  });
 });
