@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-/** Returns today's date in local time as YYYY-MM-DD (avoids UTC vs local mismatch). */
+/** Returns today's date in local time as YYYY-MM-DD */
 function getTodayLocal(): string {
   const d = new Date();
   const y = d.getFullYear();

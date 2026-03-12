@@ -25,7 +25,7 @@ export class ProductListComponent {
   /** Id of the product row whose actions menu is open, or null. */
   readonly openMenuId = signal<string | null>(null);
 
-  /** Products matching the current search term (before page size slice). */
+  /** Products matching the current search term */
   readonly filteredProducts = computed(() => {
     const term = this.searchTerm().toLowerCase().trim();
     const all = this.products();
@@ -40,7 +40,7 @@ export class ProductListComponent {
 
   readonly filteredProductCount = computed(() => this.filteredProducts().length);
 
-  /** Products to show in the table (filtered + sliced by page size). */
+  /** Products to show in the table */
   readonly displayedProducts = computed(() =>
     this.filteredProducts().slice(0, this.pageSize())
   );
@@ -96,12 +96,12 @@ export class ProductListComponent {
     }
   }
 
-  /** Reload products (e.g. after error). */
+  /** Reload products */
   retry(): void {
     this.loadProducts();
   }
 
-  /** Clear search term (used when empty search results). */
+  /** Clear search term */
   clearSearch(): void {
     this.searchTerm.set('');
   }

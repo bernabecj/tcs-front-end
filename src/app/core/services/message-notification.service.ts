@@ -13,10 +13,9 @@ export interface Notification {
 export class MessageNotificationService {
   private readonly _notification$ = new BehaviorSubject<Notification | null>(null);
 
-  /** Full notification (message + type + autoDismiss). Use this in the banner. */
+  /** Full notification */
   readonly notification$ = this._notification$.asObservable();
 
-  /** Message only, for backward compatibility. */
   readonly message$: Observable<string | null> = this._notification$.pipe(
     map((n) => n?.message ?? null)
   );

@@ -37,7 +37,7 @@ export class ProductFormComponent implements OnInit {
 
   form: FormGroup;
   submitting = false;
-  /** True after the user has clicked submit at least once; validation messages show only then. */
+  /** True after the user has clicked submit at least once. Validation messages show only then */
   submitAttempted = false;
 
   /** Set when editing an existing product (from route param :id). */
@@ -108,7 +108,7 @@ export class ProductFormComponent implements OnInit {
     return c ? c.hasError(errorCode) : false;
   }
 
-  /** Whether to show error state (red border) for a control; only after submit attempt. */
+  /** Whether to show error state for a control */
   showControlError(controlName: string): boolean {
     if (!this.submitAttempted) return false;
     const c = this.form.get(controlName);

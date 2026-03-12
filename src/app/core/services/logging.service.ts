@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 export class LoggingService {
   logError(message: string, error?: unknown): void {
     if (environment.production) {
-      // Production: only log safe, minimal info (no URLs, bodies, or stack traces)
+      // Production
       const safe = this.sanitize(error);
       console.error(`[Error] ${message}`, safe);
     } else {

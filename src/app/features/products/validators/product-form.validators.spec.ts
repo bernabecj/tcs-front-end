@@ -1,7 +1,7 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import { dateReleaseMinToday, dateRevisionOneYearAfter } from './product-form.validators';
 
-/** Local date as YYYY-MM-DD (matches validator logic). */
+/** Local date as YYYY-MM-DD */
 function localDateString(d: Date): string {
   const y = d.getFullYear();
   const m = String(d.getMonth() + 1).padStart(2, '0');
